@@ -31,3 +31,16 @@ function createDiv(userClass) {
 
   return div
 }
+
+export function clickHandler(e, arr) {
+  const t = e.target
+
+  if (t.classList.contains('square')) {
+    const x = t.getAttribute('data-x')
+    const y = t.getAttribute('data-y')
+
+    arr[y][x] = +!arr[y][x]
+
+    t.innerText = `${arr[y][x]}`
+  }
+}

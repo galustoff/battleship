@@ -45,6 +45,12 @@ body {
   height: 38px;
   background-color: rgb(10, 147, 201);
   cursor: pointer;
+  font-size: 20px;
+  color: rgb(206, 242, 245);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
 }
 
 .btn {
