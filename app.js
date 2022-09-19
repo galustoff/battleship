@@ -1,9 +1,6 @@
-const App = {
-  data() {
-    return {
-      squares: new Array(10).fill(new Array(10).fill(0))
-    }
-  }
-}
+import { squares } from './utils/constants.js'
+import { renderGrid } from './utils/utils.js'
 
-Vue.createApp(App).mount('#app')
+const container = document.querySelector('#container')
+
+container.append(renderGrid(squares))
