@@ -53,7 +53,12 @@ body {
   user-select: none;
 }
 
-.btn {
+.square_selected {
+  color: rgb(10, 147, 201);
+  background-color: rgb(252, 184, 184);
+}
+
+.validity-btn {
   width: 200px;
   height: 40px;
   border: none;
@@ -64,12 +69,12 @@ body {
   box-shadow: 4px 4px 3px #111;
 }
 
-.btn:hover {
+.validity-btn:hover {
   color: rgb(30, 83, 14);
   cursor: pointer;
 }
 
-.btn:active {
+.validity-btn:active {
   color: rgb(206, 242, 245);
   background-color: rgb(8, 73, 22);
   box-shadow: unset;

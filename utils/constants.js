@@ -1,1 +1,4 @@
-export const squares = new Array(10).fill(new Array(10).fill(0))
+import { createMtx } from './utils.js'
+
+//creating matrix with side size 10 filled with 0
+export const squares = createMtx(10, 0)
