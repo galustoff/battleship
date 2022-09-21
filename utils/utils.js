@@ -66,6 +66,8 @@ export function createMtx(size = 2, content = 0) {
 }
 
 export function validateBattlefield(field) {
+  // The types of ships that may be present. Contains length,
+  // allowed amount and amount in fact.
   const battleship = {
     len: 4,
     allowed: 1,
@@ -90,11 +92,24 @@ export function validateBattlefield(field) {
     present: 0
   }
 
+  // The common array of coordinates of squares, occupied by ships
+  // Contains strings like "x3y5"
   let occupiedFields = []
-  let isErrorOccured = false
+  // The array of errors that may occure, like invalid length
+  // of a ship or being of ship in dead zone of another ship etc
+  let occuredErrors = []
 
+  // Running main function
   checkField(field)
 
+  // TEST PRINT
+  console.log('occupiedFiels: \n', occupiedFields)
+
+  // Main function goes throw the two-dimension array. If an element
+  // is equal to 1, we have to get coordinates string (getCoords(x, y))
+  // and check if the array occupiedFields includes it. If so, that
+  // means we find a ship which already taken in to account, otherwise
+  // we find a new ship and have to identify it.
   function checkField(field) {
     for (let y = 0; y < field.length; y++) {
       for (let x = 0; x < field[y].length; x++) {
@@ -111,13 +126,17 @@ export function validateBattlefield(field) {
     }
   }
 
+  // This function takes two numbers "x" and "y" and returns a string
+  // of coordinates like "x2y3"
   function getCoords(x, y) {
     return `x${x}y${y}`
   }
 
   function identifyShip(x, y) {
+    // TEST PRINT
     console.log(`A new ship detected in square: ${getCoords(x, y)}`)
 
+    // Defining an object for the new ship
     const newShip = {
       coords: [],
       dir: null,
@@ -128,14 +147,19 @@ export function validateBattlefield(field) {
     newShip.coords = getShipCoords(x, y, newShip.dir)
     newShip.len = getShipLen(newShip)
 
-    occupiedFields += newShip.coords
-    console.log(newShip)
+    occupiedFields = occupiedFields.concat(newShip.coords)
+
+    // TEST PRINT
+    console.log('newShip: \n', newShip)
   }
 
+  // The function determs direction of a new ship: vertical or
+  // horizontal
   function getShipDirection(x, y) {
     return field[y][x + 1] === 0 ? 'ver' : 'hor'
   }
 
+  // The function returns an array of coordinates of a new ship
   function getShipCoords(x, y, dir) {
       const coords = []
 
@@ -153,9 +177,10 @@ export function validateBattlefield(field) {
       return coords
   }
 
+  // The function returns the length of a new ship
   function getShipLen({coords, dir}) {
     const idx = dir === 'hor' ? 1 : 3
 
-    return coords[coords.length - 1][idx] - coords[0][idx] + 1
+    return (coords[coords.length - 1][idx] - coords[0][idx]) + 1
   }
 }
