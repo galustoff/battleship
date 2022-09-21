@@ -110,6 +110,7 @@ export function validateBattlefield(field) {
   checkField(field)
   // Returning the result
   if (occuredErrors.length > 0) {
+    console.log(occuredErrors)
     return false
   } else {
     return true
@@ -137,9 +138,10 @@ export function validateBattlefield(field) {
           } else {
             const newShip = identifyShip(x, y)
 
-            if (isShipValid(newShip)/* && isDeadZoneClear(newShip) */) {
+            if (isShipValid(newShip) && isDeadZoneClear(newShip)) {
               includeShip(newShip)
             } else {
+              occuredErrors.push(new Error('It seems something went wrong...'))
               return
             }
           }
@@ -233,10 +235,32 @@ export function validateBattlefield(field) {
     return true
   }
 
-  // The function checks if the dead zone of a new ship is not occupied
+  // The function checks if the dead zone around the new ship is not occupied
   // by another ships
   function isDeadZoneClear(newShip) {
+    const coords = newShip.coords
 
+    let xStart = Number(coords[0][1]) - 1
+    let xEnd = Number(coords[coords.length - 1][1]) + 1
+    let yStart = Number(coords[0][3]) - 1
+    let yEnd = Number(coords[coords.length - 1][3]) + 1
+
+    if (xStart < 0) xStart = 0
+    if (yStart < 0) yStart = 0
+    if (xEnd > 9) xEnd = 9
+    if (yEnd > 9) yEnd = 9
+
+    for (let y = yStart; y <= yEnd; y++) {
+      for (let x = xStart; x <= xEnd; x++) {
+        if (field[y][x] === 1 && !coords.includes(getCoords(x, y))) {
+          console.log(coords)
+          occuredErrors.push(new Error(`There are a ship in the dead zone of another ship: ${getCoords(x, y)}`))
+          return false
+        }
+      }
+    }
+
+    return true
   }
 
   // The fuction takes a new ship into account
