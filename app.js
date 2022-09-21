@@ -5,6 +5,7 @@ import { validateBattlefield } from './utils/utils.js'
 
 const container = document.querySelector('#container')
 const validityBtn = document.querySelector('#validity-btn')
+const resultDisplay = document.querySelector('#result-display')
 
 container.append(renderGrid(squares))
 
@@ -15,5 +16,5 @@ grid.addEventListener('click', (e) => {
 })
 
 validityBtn.addEventListener('click', () => {
-  validateBattlefield(squares)
+  resultDisplay.textContent = validateBattlefield(squares)
 })

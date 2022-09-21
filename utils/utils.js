@@ -66,28 +66,34 @@ export function createMtx(size = 2, content = 0) {
 }
 
 export function validateBattlefield(field) {
-  // The types of ships that may be present. Contains length and
-  // allowed amount, which will decrease as a new ship of corresponding
-  // type will appear on the field
-  const battleship = {
-    len: 4,
-    allowed: 1
-  }
+  // The fleet consists of the types of ships that may be present. Every
+  // type contains its name, length and allowed amount, which will decrease
+  // as a new ship of corresponding type will appear on the field
+  const fleet = [
+    {
+      name: 'battleship',
+      len: 4,
+      allowed: 1
+    },
 
-  const cruiser = {
-    len: 3,
-    allowed: 2    
-  }
+    {
+      name: 'cruiser',
+      len: 3,
+      allowed: 2    
+    },
 
-  const destroyer = {
-    len: 2,
-    allowed: 3    
-  }
+    {
+      name: 'destroyer',
+      len: 2,
+      allowed: 3    
+    },
 
-  const submarine = {
-    len: 1,
-    allowed: 4    
-  }
+    {
+      name: 'submarine',
+      len: 1,
+      allowed: 4    
+    }
+  ]
 
   // The common array of coordinates of squares, occupied by all
   // ships on the field. Contains strings like "x3y5"
@@ -119,7 +125,7 @@ export function validateBattlefield(field) {
   // and check if the array occupiedFields includes it. If so, that
   // means we find a ship which already taken into account, otherwise
   // we find a new ship and have to identify it, check its validity
-  // and "include it in the fleet"
+  // and include it in the fleet
   function checkField(field) {
     for (let y = 0; y < field.length; y++) {
       for (let x = 0; x < field[y].length; x++) {
@@ -131,7 +137,7 @@ export function validateBattlefield(field) {
           } else {
             const newShip = identifyShip(x, y)
 
-            if (isShipValid(newShip) && isDeadZoneClear(newShip)) {
+            if (isShipValid(newShip)/* && isDeadZoneClear(newShip) */) {
               includeShip(newShip)
             } else {
               return
@@ -139,6 +145,10 @@ export function validateBattlefield(field) {
           }
         }
       }
+    }
+
+    if (fleet.some(sh => sh.allowed > 0)) {
+      occuredErrors.push(new Error('There are not enough of ships on the battlefield!'))
     }
   }
 
@@ -205,7 +215,22 @@ export function validateBattlefield(field) {
   // its type and checks if amount of this type of ship is allowed
   // on the field
   function isShipValid(newShip) {
+    const newShipLen = newShip.len
 
+    if (newShipLen < 1 || newShipLen > 4) {
+      occuredErrors.push(new Error(`Wrong length of a ship: ${newShipLen}`))
+      return false
+    }
+
+    const typeOfShip = fleet.find(i => i.len === newShipLen)
+
+    if (typeOfShip.allowed === 0) {
+      occuredErrors.push(new Error(`There are too many ships of type ${typeOfShip.name}`))
+      return false
+    }
+
+    typeOfShip.allowed -= 1
+    return true
   }
 
   // The function checks if the dead zone of a new ship is not occupied
