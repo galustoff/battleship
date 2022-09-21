@@ -110,7 +110,6 @@ export function validateBattlefield(field) {
   checkField(field)
   // Returning the result
   if (occuredErrors.length > 0) {
-    console.log(occuredErrors)
     return false
   } else {
     return true
@@ -141,7 +140,6 @@ export function validateBattlefield(field) {
             if (isShipValid(newShip) && isDeadZoneClear(newShip)) {
               includeShip(newShip)
             } else {
-              // occuredErrors.push(new Error('It seems something went wrong...'))
               return
             }
           }
@@ -253,7 +251,6 @@ export function validateBattlefield(field) {
     for (let y = yStart; y <= yEnd; y++) {
       for (let x = xStart; x <= xEnd; x++) {
         if (field[y][x] === 1 && !coords.includes(getCoords(x, y))) {
-          console.log(coords)
           occuredErrors.push(new Error(`There is a ship in the dead zone of another ship: ${getCoords(x, y)}`))
           return false
         }
