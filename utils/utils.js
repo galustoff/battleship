@@ -141,7 +141,7 @@ export function validateBattlefield(field) {
             if (isShipValid(newShip) && isDeadZoneClear(newShip)) {
               includeShip(newShip)
             } else {
-              occuredErrors.push(new Error('It seems something went wrong...'))
+              // occuredErrors.push(new Error('It seems something went wrong...'))
               return
             }
           }
@@ -180,9 +180,9 @@ export function validateBattlefield(field) {
 
 
   // The function determs direction of a new ship: vertical or
-  // horizontal
+  // horizontal. Submarines are assume as vertical.
   function getShipDirection(x, y) {
-    return field[y][x + 1] === 0 ? 'ver' : 'hor'
+    return (x === 9 || field[y][x + 1] === 0) ? 'ver' : 'hor'
   }
 
 
@@ -254,7 +254,7 @@ export function validateBattlefield(field) {
       for (let x = xStart; x <= xEnd; x++) {
         if (field[y][x] === 1 && !coords.includes(getCoords(x, y))) {
           console.log(coords)
-          occuredErrors.push(new Error(`There are a ship in the dead zone of another ship: ${getCoords(x, y)}`))
+          occuredErrors.push(new Error(`There is a ship in the dead zone of another ship: ${getCoords(x, y)}`))
           return false
         }
       }
